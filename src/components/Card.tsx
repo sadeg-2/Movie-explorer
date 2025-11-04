@@ -77,7 +77,15 @@ export default function Card(props: CardProps) {
                 </p>
               )}
 
-              <p className="text-gray-300 text-xs leading-snug line-clamp-3 overflow-hidden min-h-0 flex-grow">
+              <p
+                className="
+    text-gray-300 text-xs leading-snug
+    overflow-hidden text-ellipsis
+    line-clamp-3
+    break-words        /* ✅ text MUST wrap */
+    whitespace-normal  /* ✅ break long lines */
+  "
+              >
                 {description}
               </p>
             </div>
@@ -104,12 +112,22 @@ export default function Card(props: CardProps) {
           bg-neutral-900 text-white p-4 rounded-xl shadow-lg
           transform-[rotateY(180deg)]
           backface-hidden
+          wrap-break-word       
+            whitespace-normal  
           flex flex-col justify-center items-center gap-4
         "
         >
           <h3 className="text-xl font-bold">{title}</h3>
-          <p className="text-gray-300 text-sm text-center">
-            {description || 'More info coming soon...'}
+          <p
+            className="
+            text-gray-300 text-xs leading-snug
+            overflow-hidden text-ellipsis
+            line-clamp-3
+            wrap-break-word       
+            whitespace-normal  
+            "
+          >
+            {description}
           </p>
         </div>
       </div>
