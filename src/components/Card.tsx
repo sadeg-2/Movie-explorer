@@ -49,7 +49,10 @@ export default function Card(props: CardProps) {
             {/* Play + Heart Buttons */}
             <div className="absolute bottom-2 left-2 flex gap-2 z-20">
               <button
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAction?.();
+                }}
                 className="bg-white/20 hover:bg-white/40 text-white p-2 rounded-full backdrop-blur-md transition"
               >
                 ▶
