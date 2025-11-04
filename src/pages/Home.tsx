@@ -2,18 +2,11 @@ import { useEffect, useState } from 'react';
 import Hero from '../components/Hero';
 import MovieRow from '../components/MovieRow';
 import type { CardProps } from '../types/CardTypes';
-import { getTrailerKey, MovieAPI } from '../services/tmdbService';
+import { MovieAPI } from '../services/tmdbService';
 import type { TMDBMovie } from '../types/TMDBTypes';
 import TrailerModal from '../components/TrailerModal';
 
 export default function Home() {
-  const [trailerKey, setTrailerKey] = useState<string | null>(null);
-
-  const handlePlayTrailer = async (id: number) => {
-    const key = await getTrailerKey(id);
-    setTrailerKey(key);
-  };
-
   const [popular, setPopular] = useState<CardProps[]>([]);
   const [topRated, setTopRated] = useState<CardProps[]>([]);
   const [newReleases, setNewReleases] = useState<CardProps[]>([]);
@@ -46,7 +39,6 @@ export default function Home() {
       const comedyData = await MovieAPI.getComedyMovies();
       const animationData = await MovieAPI.getAnimationMovies();
       const horryData = await MovieAPI.getHorrorMovies();
-      console.log(horryData);
       setTrending(mapMovies(trendingData));
       setUpcoming(mapMovies(upcomingData));
       setActionMovies(mapMovies(actionData));
@@ -63,7 +55,7 @@ export default function Home() {
 
   return (
     <>
-      {trailerKey && <TrailerModal videoKey={trailerKey} onClose={() => setTrailerKey(null)} />}
+      <TrailerModal />
       <Hero
         image="https://image.tmdb.org/t/p/original/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg"
         title="Featured Movie Title"
@@ -72,15 +64,15 @@ export default function Home() {
         onPlay={() => console.log('Play')}
         onMore={() => console.log('More info')}
       />
-      <MovieRow title="Popular Movies" movies={popular} onAction={handlePlayTrailer} />
-      <MovieRow title="Top Rated" movies={topRated} onAction={handlePlayTrailer} />
-      <MovieRow title="New Releases" movies={newReleases} onAction={handlePlayTrailer} />
-      <MovieRow title="Trending Now" movies={trending} onAction={handlePlayTrailer} />
-      <MovieRow title="Upcoming" movies={upcoming} onAction={handlePlayTrailer} />
-      <MovieRow title="Action Movies" movies={actionMovies} onAction={handlePlayTrailer} />
-      <MovieRow title="Comedy Movies" movies={comedyMovies} onAction={handlePlayTrailer} />
-      <MovieRow title="Animation Movies" movies={animationMovies} onAction={handlePlayTrailer} />
-      <MovieRow title="horror Movies" movies={horrorMovies} onAction={handlePlayTrailer} />
+      <MovieRow title="Popular Movies" movies={popular} />
+      <MovieRow title="Top Rated" movies={topRated} />
+      <MovieRow title="New Releases" movies={newReleases} />
+      <MovieRow title="Trending Now" movies={trending} />
+      <MovieRow title="Upcoming" movies={upcoming} />
+      <MovieRow title="Action Movies" movies={actionMovies} />
+      <MovieRow title="Comedy Movies" movies={comedyMovies} />
+      <MovieRow title="Animation Movies" movies={animationMovies} />
+      <MovieRow title="horror Movies" movies={horrorMovies} />
     </>
   );
 }
