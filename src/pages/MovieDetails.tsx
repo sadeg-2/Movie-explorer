@@ -11,12 +11,14 @@ import type { CardProps } from '../types/CardTypes';
 import Hero from '../components/Hero';
 import CastRow from '../components/CastRow';
 import type { TMDBMovieDetails } from '../types/TMDBTypes';
+import { useTrailerStore } from '../store/useTrailerStore';
 
 type CastItem = { id: number; name: string; character: string; profile_path: string | null };
 
 export default function MovieDetails() {
   const { id } = useParams<{ id: string }>();
   const movieId = Number(id);
+  const { open } = useTrailerStore();
 
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState<TMDBMovieDetails>();
@@ -71,7 +73,7 @@ export default function MovieDetails() {
         onMore={() => {
           document.getElementById('cast-section')?.scrollIntoView({ behavior: 'smooth' });
         }}
-        
+        onAction={() => open(movieId)}
       />
 
       {/* Cast */}

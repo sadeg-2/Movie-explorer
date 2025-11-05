@@ -6,6 +6,7 @@ import MovieDetails from './pages/MovieDetails';
 import ActorDetails from './components/ActorDetails';
 import DiscoverMovies from './pages/DiscoverMovies';
 import DiscoverSeries from './pages/DiscoverSeries';
+import SeriesDetails from './pages/SeriesDetails';
 
 export default function App() {
   return (
@@ -16,6 +17,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/tv/:id" element={<SeriesDetails />} />
+
           <Route path="/actor/:id" element={<ActorDetails />} />
           <Route path="/discover/movies" element={<DiscoverMovies />} />
           <Route path="/discover/series" element={<DiscoverSeries />} />

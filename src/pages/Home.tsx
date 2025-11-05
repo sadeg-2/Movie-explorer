@@ -5,8 +5,10 @@ import type { CardProps } from '../types/CardTypes';
 import { MovieAPI } from '../services/tmdbService';
 import type { TMDBMovie } from '../types/TMDBTypes';
 import { useNavigate } from 'react-router-dom';
+import { useTrailerStore } from '../store/useTrailerStore';
 
 export default function Home() {
+  const { open } = useTrailerStore();
   const navigate = useNavigate();
   const [popular, setPopular] = useState<CardProps[]>([]);
   const [topRated, setTopRated] = useState<CardProps[]>([]);
@@ -80,6 +82,7 @@ export default function Home() {
           tagline={`⭐ ${heroMovie.rating} • ${heroMovie.subtitle}`}
           description={heroMovie.description}
           onMore={() => navigate(`/movie/${heroMovie.id}`)}
+          onAction={() => open(heroMovie.id)}
         />
       )}
 

@@ -40,7 +40,7 @@ export async function getActorMovies(id: number) {
   }
 }
 
-export function mapToCardProps(items: TMDBMedia[]): CardProps[] {
+export function mapToCardProps(items: TMDBMedia[] , type?:string): CardProps[] {
   return items.map(
     (m) =>
       ({
@@ -53,6 +53,7 @@ export function mapToCardProps(items: TMDBMedia[]): CardProps[] {
         description: m.overview ?? 'No description available.',
         rating: m.vote_average ? Number(m.vote_average.toFixed(1)) : 0,
         actionLabel: 'More Info',
+        type:type?? "movie"
       } as CardProps)
   );
 }
@@ -128,6 +129,42 @@ export async function getSimilarMovies(id: number) {
   const data = await res.json();
   return data.results ?? [];
 }
+// ✅ TV DETAILS
+export async function getTVDetails(id: number) {
+  try {
+    const res = await fetch(buildUrl(`/tv/${id}`));
+    if (!res.ok) throw new Error('Failed to fetch TV details');
+    return await res.json();
+  } catch (err) {
+    console.error('TV Details Fetch Error →', err);
+    return null;
+  }
+}
+
+// ✅ TV CREDITS (CAST)
+export async function getTVCredits(id: number) {
+  try {
+    const res = await fetch(buildUrl(`/tv/${id}/credits`));
+    if (!res.ok) throw new Error('Failed to fetch TV credits');
+    return await res.json();
+  } catch (err) {
+    console.error('TV Credits Fetch Error →', err);
+    return { cast: [] };
+  }
+}
+
+// ✅ SIMILAR TV SHOWS
+export async function getSimilarTV(id: number) {
+  try {
+    const res = await fetch(buildUrl(`/tv/${id}/similar`, '&page=1'));
+    if (!res.ok) throw new Error('Failed to fetch similar TV');
+    const data = await res.json();
+    return data.results ?? [];
+  } catch (err) {
+    console.error('Similar TV Fetch Error →', err);
+    return [];
+  }
+}
 
 // ✅ EXPORT API in your same style
 export const MovieAPI = {
@@ -149,4 +186,7 @@ export const MovieAPI = {
   getMovieDetails,
   getMovieCredits,
   getSimilarMovies,
+  getTVDetails,
+  getTVCredits,
+  getSimilarTV,
 };

@@ -1,4 +1,3 @@
-import { useTrailerStore } from '../store/useTrailerStore';
 
 type HeroProps = {
   id: number;
@@ -7,10 +6,17 @@ type HeroProps = {
   tagline?: string;
   description?: string;
   onMore?: () => void;
+  onAction: () => void;
 };
 
-export default function Hero({ image, title, tagline, description, id, onMore }: HeroProps) {
-  const { open } = useTrailerStore();
+export default function Hero({
+  image,
+  title,
+  tagline,
+  description,
+  onMore,
+  onAction,
+}: HeroProps) {
   return (
     <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
       {/* Background image */}
@@ -45,7 +51,7 @@ export default function Hero({ image, title, tagline, description, id, onMore }:
           {/* Actions */}
           <div className="mt-5 flex flex-wrap gap-3">
             <button
-              onClick={() => open(id)}
+              onClick={onAction}
               className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-lg font-semibold transition"
             >
               {/* Play icon (inline SVG) */}
