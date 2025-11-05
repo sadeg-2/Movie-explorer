@@ -1,5 +1,5 @@
 import type { CardProps } from '../types/CardTypes';
-import type { TMDBMovie, TMDBVideo } from '../types/TMDBTypes';
+import type { TMDBMedia, TMDBVideo } from '../types/TMDBTypes';
 
 // const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_KEY = 'e247f482a1353f52e20c467698443143';
@@ -40,16 +40,21 @@ export async function getActorMovies(id: number) {
   }
 }
 
-export function mapToCardProps(movies: TMDBMovie[]): CardProps[] {
-  return movies.map((m) => ({
-    id: m.id,
-    image: m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : '/placeholder.jpg',
-    title: m.title,
-    subtitle: m.release_date?.slice(0, 4) ?? 'Unknown',
-    description: m.overview,
-    rating: m.vote_average ? Number(m.vote_average.toFixed(1)) : 0,
-    actionLabel: 'More Info',
-  }));
+export function mapToCardProps(items: TMDBMedia[]): CardProps[] {
+  return items.map(
+    (m) =>
+      ({
+        id: m.id,
+        image: m.poster_path
+          ? `https://image.tmdb.org/t/p/w500${m.poster_path}`
+          : '/placeholder.jpg',
+        title: m.title ?? m.name ?? 'Untitled',
+        subtitle: m.release_date?.slice(0, 4) ?? m.first_air_date?.slice(0, 4) ?? 'Unknown',
+        description: m.overview ?? 'No description available.',
+        rating: m.vote_average ? Number(m.vote_average.toFixed(1)) : 0,
+        actionLabel: 'More Info',
+      } as CardProps)
+  );
 }
 
 export async function fetchMovies(endpoint: string) {
@@ -68,12 +73,38 @@ export async function fetchMovieVideos(id: number) {
   const data = await res.json();
   return data;
 }
+export async function fetchDiscover(endpoint: string, page: number = 1) {
+  const separator = endpoint.includes('?') ? '&' : '?';
 
-export async function getTrailerKey(movieId: number): Promise<string | null> {
-  const data = await fetchMovieVideos(movieId);
-  const trailer = data.results?.find(
-    (video: TMDBVideo) => video.type === 'Trailer' && video.site === 'YouTube'
+  const res = await fetch(
+    `${BASE_URL}${endpoint}${separator}api_key=${API_KEY}&language=en-US&page=${page}`
   );
+
+  if (!res.ok) {
+    console.error('TMDB Discover API Error:', res.statusText);
+    return { results: [], total_pages: 1 };
+  }
+
+  const data = await res.json();
+  return {
+    results: data.results ?? [],
+    total_pages: data.total_pages ?? 1,
+  };
+}
+
+export async function getTrailerKey(
+  id: number,
+  type: 'movie' | 'tv' = 'movie'
+): Promise<string | null> {
+  const videoEndpoint = type === 'movie' ? `/movie/${id}/videos` : `/tv/${id}/videos`;
+
+  const res = await fetch(buildUrl(videoEndpoint));
+  const data = await res.json();
+
+  const trailer = data.results?.find(
+    (v: TMDBVideo) => v.type === 'Trailer' && v.site === 'YouTube'
+  );
+
   return trailer?.key ?? null;
 }
 

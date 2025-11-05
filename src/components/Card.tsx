@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import type { CardProps } from '../types/CardTypes';
 import { useTrailerStore } from '../store/useTrailerStore';
-import { useNavigate } from 'react-router-dom';
 
 export default function Card(props: CardProps) {
-  const { id, image, title, subtitle, description, rating, actionLabel } = props;
+  const { id, image, title, subtitle, description, rating, actionLabel ,onAction,type} = props;
   const { open } = useTrailerStore();
-  const navigate = useNavigate();
 
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -59,7 +57,7 @@ export default function Card(props: CardProps) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  open(id); // ✅ just give movie id
+                  open(id,type?? "movie"); // ✅ just give movie id
                 }}
                 className="bg-white/20 hover:bg-white/40 text-white p-2 rounded-full backdrop-blur-md transition"
               >
@@ -106,7 +104,7 @@ export default function Card(props: CardProps) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`/movie/${id}`);
+                  onAction();
                 }}
                 className="w-full bg-red-600 hover:bg-red-700 text-white mb-3 rounded-lg py-2 text-xs font-medium transition-colors"
               >

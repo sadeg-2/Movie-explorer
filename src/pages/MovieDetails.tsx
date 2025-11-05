@@ -71,6 +71,7 @@ export default function MovieDetails() {
         onMore={() => {
           document.getElementById('cast-section')?.scrollIntoView({ behavior: 'smooth' });
         }}
+        
       />
 
       {/* Cast */}

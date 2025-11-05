@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import type { CardProps } from '../types/CardTypes';
 import Card from './Card';
 
@@ -7,6 +8,7 @@ type MovieRowProps = {
 };
 
 export default function MovieRow({ title, movies }: MovieRowProps) {
+  const navigate = useNavigate();
   return (
     <section className="mt-10 px-6">
       {/* ✅ Title not part of scroll */}
@@ -37,7 +39,7 @@ export default function MovieRow({ title, movies }: MovieRowProps) {
               first:ml-0 last:mr-0
             "
               >
-                <Card {...movie} />
+                <Card {...movie} onAction={() => navigate(`/movie/${movie.id}`)} />
               </div>
             ))}
           </div>

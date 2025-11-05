@@ -30,6 +30,7 @@ export default function Home() {
           description: m.overview,
           rating: m.vote_average ? Number(m.vote_average.toFixed(1)) : 0,
           actionLabel: 'More Info',
+          onAction: () => navigate(`/movie/${m.id}`),
         }));
 
       const popularData = await MovieAPI.getPopular();
@@ -61,6 +62,7 @@ export default function Home() {
         description: heroMovieRaw.overview,
         rating: heroMovieRaw.vote_average,
         actionLabel: 'Watch Trailer',
+        onAction: () => navigate(`/movie/${heroMovieRaw.id}`),
       };
       setHero(hero);
     }

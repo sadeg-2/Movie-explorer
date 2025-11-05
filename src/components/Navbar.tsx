@@ -21,8 +21,12 @@ export default function Navbar() {
         <Link to={'/'} className="cursor-pointer hover:text-red-500 transition">
           Home
         </Link>
-        <a className="cursor-pointer hover:text-red-500 transition">Movies</a>
-        <a className="cursor-pointer hover:text-red-500 transition">Series</a>
+        <Link to={'/discover/movies'} className="cursor-pointer hover:text-red-500 transition">
+          Movies
+        </Link>
+        <Link to={'/discover/series'} className="cursor-pointer hover:text-red-500 transition">
+          Series
+        </Link>
         <a className="cursor-pointer hover:text-red-500 transition">Favorites</a>
       </div>
 

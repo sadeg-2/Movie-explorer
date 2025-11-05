@@ -16,6 +16,16 @@ export interface TMDBVideo {
   official?: boolean;
   published_at?: string;
 }
+export type TMDBMedia = {
+  id: number;
+  poster_path?: string | null;
+  title?: string; // Movies
+  name?: string; // TV Shows
+  overview?: string;
+  vote_average?: number;
+  release_date?: string; // Movies
+  first_air_date?: string; // TV Shows
+};
 export type TMDBCast = {
   id: number;
   name: string;
@@ -55,5 +65,3 @@ export interface TMDBMovieCredit {
   overview: string;
   vote_average: number;
 }
-
-

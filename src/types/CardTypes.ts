@@ -1,3 +1,5 @@
+import type { MediaType } from '../store/useTrailerStore';
+
 export type CardProps = {
   id: number;
   image: string;
@@ -6,5 +8,6 @@ export type CardProps = {
   description?: string;
   rating: number;
   actionLabel?: string;
-  onAction?: () => void;
+  type?: MediaType;
+  onAction: () => void;
 };

@@ -4,6 +4,8 @@ import TrailerModal from './components/TrailerModal';
 import Home from './pages/Home';
 import MovieDetails from './pages/MovieDetails';
 import ActorDetails from './components/ActorDetails';
+import DiscoverMovies from './pages/DiscoverMovies';
+import DiscoverSeries from './pages/DiscoverSeries';
 
 export default function App() {
   return (
@@ -15,7 +17,8 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/actor/:id" element={<ActorDetails />} />
-
+          <Route path="/discover/movies" element={<DiscoverMovies />} />
+          <Route path="/discover/series" element={<DiscoverSeries />} />
         </Routes>
       </BrowserRouter>
     </div>
