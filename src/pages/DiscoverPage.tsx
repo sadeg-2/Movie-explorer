@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchDiscover } from '../services/tmdbService';
-import { mapToCardProps } from '../services/tmdbService';
+import { discoverMedia } from '../services/tmdbService';
 import type { CardProps } from '../types/CardTypes';
 import Card from '../components/Card';
-
+import { getGenres } from '../services/tmdbService';
+import DiscoverFilters from '../components/FiltersBar';
 type DiscoverProps = {
   type: 'movie' | 'tv';
   title: string;
   discoverEndpoint: string;
 };
 
-export default function DiscoverPage({ type, title, discoverEndpoint }: DiscoverProps) {
+export default function DiscoverPage({ type, title }: DiscoverProps) {
   const navigate = useNavigate();
 
   const [page, setPage] = useState(1);
@@ -19,27 +19,51 @@ export default function DiscoverPage({ type, title, discoverEndpoint }: Discover
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const [genres, setGenres] = useState<{ id: number; name: string }[]>([]);
+  const [genre, setGenre] = useState('');
+  const [year, setYear] = useState('');
+  const [sort, setSort] = useState('popularity.desc');
+  const [search, setSearch] = useState('');
+  useEffect(() => {
+    (async () => {
+      const g = await getGenres(type);
+      setGenres(g);
+    })();
+  }, [type]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [genre, year, sort, search]);
+
   useEffect(() => {
     async function load() {
       setLoading(true);
 
-      const endpoint = `${discoverEndpoint}?page=${page}`;
-      const data = await fetchDiscover(endpoint, page);
-      const results = mapToCardProps(data.results);
-      console.log(results);
-      setResults(mapToCardProps(data.results));
-      setTotalPages(data.total_pages);
-      setLoading(false);
+      const { results, total_pages } = await discoverMedia(type, page, genre, year, sort, search);
 
+      setResults(results);
+      setTotalPages(total_pages);
+      setLoading(false);
       window.scrollTo(0, 0);
     }
     load();
-  }, [discoverEndpoint, page]);
+  }, [type, page, genre, year, sort, search]);
 
   return (
     <div className="text-white w-full min-h-screen py-10">
       {/* Page Title */}
       <h1 className="text-3xl font-bold mb-10 px-6">{title}</h1>
+      <DiscoverFilters
+        genres={genres}
+        genre={genre}
+        year={year}
+        sort={sort}
+        search={search}
+        setGenre={setGenre}
+        setYear={setYear}
+        setSort={setSort}
+        setSearch={setSearch}
+      />
 
       {/* ✅ Movie Grid */}
       {loading ? (

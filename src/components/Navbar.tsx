@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import NavbarSearch from './NavbarSearch';
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -33,11 +34,9 @@ export default function Navbar() {
       {/* SEARCH + PROFILE */}
       <div className="flex items-center gap-4">
         {/* Search Bar */}
-        <input
-          type="text"
-          placeholder="Search"
-          className="hidden sm:block bg-neutral-800 text-sm px-3 py-1 rounded-lg outline-none border border-neutral-700 focus:border-red-500 transition"
-        />
+        <div className="flex items-center gap-4">
+          <NavbarSearch />
+        </div>
 
         {/* Profile Icon */}
         {/* Profile Menu */}

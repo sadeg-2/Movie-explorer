@@ -40,7 +40,7 @@ export async function getActorMovies(id: number) {
   }
 }
 
-export function mapToCardProps(items: TMDBMedia[] , type?:string): CardProps[] {
+export function mapToCardProps(items: TMDBMedia[], type?: string): CardProps[] {
   return items.map(
     (m) =>
       ({
@@ -53,9 +53,51 @@ export function mapToCardProps(items: TMDBMedia[] , type?:string): CardProps[] {
         description: m.overview ?? 'No description available.',
         rating: m.vote_average ? Number(m.vote_average.toFixed(1)) : 0,
         actionLabel: 'More Info',
-        type:type?? "movie"
+        type: type ?? 'movie',
       } as CardProps)
   );
+}
+export async function getGenres(type: 'movie' | 'tv') {
+  const res = await fetch(buildUrl(`/genre/${type}/list`));
+  const data = await res.json();
+  return data.genres ?? [];
+}
+
+export async function discoverMedia(
+  type: 'movie' | 'tv',
+  page: number = 1,
+  genre?: string,
+  year?: string,
+  sort: string = 'popularity.desc',
+  search?: string
+) {
+  try {
+    let endpoint = search
+      ? `/search/${type}?query=${encodeURIComponent(search)}`
+      : `/discover/${type}?sort_by=${sort}`;
+
+    if (genre) endpoint += `&with_genres=${genre}`;
+    if (year) {
+      endpoint +=
+        type === 'movie' ? `&primary_release_year=${year}` : `&first_air_date_year=${year}`;
+    }
+
+    const url = buildUrl(endpoint, `&page=${page}`);
+    console.log('Discover URL:', url);
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Discover fetch failed');
+
+    const data = await res.json();
+
+    return {
+      results: mapToCardProps(data.results ?? []),
+      total_pages: Math.min(data.total_pages ?? 1, 500),
+    };
+  } catch (err) {
+    console.error('Discover Media Error →', err);
+    return { results: [], total_pages: 1 };
+  }
 }
 
 export async function fetchMovies(endpoint: string) {
@@ -73,24 +115,6 @@ export async function fetchMovieVideos(id: number) {
   const res = await fetch(buildUrl(`/movie/${id}/videos`));
   const data = await res.json();
   return data;
-}
-export async function fetchDiscover(endpoint: string, page: number = 1) {
-  const separator = endpoint.includes('?') ? '&' : '?';
-
-  const res = await fetch(
-    `${BASE_URL}${endpoint}${separator}api_key=${API_KEY}&language=en-US&page=${page}`
-  );
-
-  if (!res.ok) {
-    console.error('TMDB Discover API Error:', res.statusText);
-    return { results: [], total_pages: 1 };
-  }
-
-  const data = await res.json();
-  return {
-    results: data.results ?? [],
-    total_pages: data.total_pages ?? 1,
-  };
 }
 
 export async function getTrailerKey(
@@ -165,6 +189,30 @@ export async function getSimilarTV(id: number) {
     return [];
   }
 }
+export async function searchMulti(query: string, page: number = 1) {
+  if (!query.trim()) return { results: [] };
+
+  const url = buildUrl(
+    `/search/multi?query=${encodeURIComponent(query)}`,
+    `&page=${page}`
+  );
+
+  const res = await fetch(url);
+  if (!res.ok) return { results: [] };
+
+  const data = await res.json();
+
+  // Filter out irrelevant results like "person with no profile"
+  return {
+    results: data.results?.filter(
+      (item: any) =>
+        item.media_type === 'movie' ||
+        item.media_type === 'tv' ||
+        (item.media_type === 'person' && item.profile_path)
+    ) ?? [],
+  };
+}
+
 
 // ✅ EXPORT API in your same style
 export const MovieAPI = {
