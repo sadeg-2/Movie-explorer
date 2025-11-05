@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import type { CardProps } from '../types/CardTypes';
 import { useTrailerStore } from '../store/useTrailerStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function Card(props: CardProps) {
   const { id, image, title, subtitle, description, rating, actionLabel } = props;
   const { open } = useTrailerStore();
+  const navigate = useNavigate();
 
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -35,6 +37,7 @@ export default function Card(props: CardProps) {
           {/* ✅ Image ALWAYS TOP */}
           <div className="relative w-full h-40 shrink-0 overflow-hidden">
             <img
+              loading="lazy"
               src={image}
               alt={title}
               className="w-full h-full object-cover hover:scale-110 transition duration-500"
@@ -100,6 +103,7 @@ export default function Card(props: CardProps) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  navigate(`/movie/${id}`);
                 }}
                 className="w-full bg-red-600 hover:bg-red-700 text-white mb-3 rounded-lg py-2 text-xs font-medium transition-colors"
               >

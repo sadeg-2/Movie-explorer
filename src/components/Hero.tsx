@@ -11,7 +11,15 @@ export default function Hero({ image, title, tagline, description, onPlay, onMor
   return (
     <section className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden">
       {/* Background image */}
-      <img src={image} alt={title} className="absolute inset-0 w-full h-full object-cover" />
+      <img
+        loading="lazy"
+        src={image}
+        onError={(e) => {
+          e.currentTarget.src = '/movie.avif';
+        }}
+        alt={title}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
 
       {/* Gradient overlay (bottom-left readable) */}
       <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent" />

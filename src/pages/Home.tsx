@@ -4,7 +4,7 @@ import MovieRow from '../components/MovieRow';
 import type { CardProps } from '../types/CardTypes';
 import { MovieAPI } from '../services/tmdbService';
 import type { TMDBMovie } from '../types/TMDBTypes';
-import TrailerModal from '../components/TrailerModal';
+import { useTrailerStore } from '../store/useTrailerStore';
 
 export default function Home() {
   const [popular, setPopular] = useState<CardProps[]>([]);
@@ -16,6 +16,8 @@ export default function Home() {
   const [comedyMovies, setComedyMovies] = useState<CardProps[]>([]);
   const [horrorMovies, sethorrorMovies] = useState<CardProps[]>([]);
   const [animationMovies, setAnimationMovies] = useState<CardProps[]>([]);
+  const [heroMovie, setHero] = useState<CardProps>();
+  const { open } = useTrailerStore();
 
   useEffect(() => {
     async function fetchData() {
@@ -27,7 +29,7 @@ export default function Home() {
           subtitle: m.release_date?.slice(0, 4) ?? 'Unknown',
           description: m.overview,
           rating: m.vote_average ? Number(m.vote_average.toFixed(1)) : 0,
-          actionLabel: 'Watch Now',
+          actionLabel: 'More Info',
         }));
 
       const popularData = await MovieAPI.getPopular();
@@ -48,6 +50,19 @@ export default function Home() {
       setNewReleases(mapMovies(newReleasesData));
       setAnimationMovies(mapMovies(animationData));
       sethorrorMovies(mapMovies(horryData));
+
+      const heroMovieRaw = await MovieAPI.getTrendingOne();
+
+      const hero: CardProps = {
+        id: heroMovieRaw.id,
+        image: `https://image.tmdb.org/t/p/original${heroMovieRaw.backdrop_path}`,
+        title: heroMovieRaw.title,
+        subtitle: heroMovieRaw.release_date?.slice(0, 4) ?? 'Unknown',
+        description: heroMovieRaw.overview,
+        rating: heroMovieRaw.vote_average,
+        actionLabel: 'Watch Trailer',
+      };
+      setHero(hero);
     }
 
     fetchData();
@@ -55,15 +70,17 @@ export default function Home() {
 
   return (
     <>
-      <TrailerModal />
-      <Hero
-        image="https://image.tmdb.org/t/p/original/8Y43POKjjKDGI9MH89NW0NAzzp8.jpg"
-        title="Featured Movie Title"
-        tagline="Action • Sci-Fi • 2h 10m"
-        description="A vigilante fights crime in a futuristic city where chaos rules the night."
-        onPlay={() => console.log('Play')}
-        onMore={() => console.log('More info')}
-      />
+      {heroMovie && (
+        <Hero
+          image={heroMovie.image}
+          title={heroMovie.title}
+          tagline={`⭐ ${heroMovie.rating} • ${heroMovie.subtitle}`}
+          description={heroMovie.description}
+          onPlay={() => open(heroMovie.id)} // ✅ open trailer directly
+          onMore={() => console.log('More info soon')}
+        />
+      )}
+
       <MovieRow title="Popular Movies" movies={popular} />
       <MovieRow title="Top Rated" movies={topRated} />
       <MovieRow title="New Releases" movies={newReleases} />
