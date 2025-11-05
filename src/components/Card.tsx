@@ -1,10 +1,19 @@
 import { useState } from 'react';
 import type { CardProps } from '../types/CardTypes';
 import { useTrailerStore } from '../store/useTrailerStore';
+import { useFavoritesStore } from '../store/favoritesStore';
+import { Heart } from 'lucide-react';
+import { useWatchlistStore } from '../store/useWatchlistStore';
+import { Star } from 'lucide-react';
 
 export default function Card(props: CardProps) {
-  const { id, image, title, subtitle, description, rating, actionLabel ,onAction,type} = props;
+  const { id, image, title, subtitle, description, rating, actionLabel, onAction, type } = props;
   const { open } = useTrailerStore();
+  const { toggleFavorite, isFavorite } = useFavoritesStore();
+  const favorite = isFavorite(props.id);
+
+  const { toggle, isAdded } = useWatchlistStore();
+  const inWatchlist = isAdded(id);
 
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -57,17 +66,37 @@ export default function Card(props: CardProps) {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  open(id,type?? "movie"); // ✅ just give movie id
+                  open(id, type ?? 'movie'); // ✅ just give movie id
                 }}
                 className="bg-white/20 hover:bg-white/40 text-white p-2 rounded-full backdrop-blur-md transition"
               >
                 ▶
               </button>
               <button
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(props);
+                }}
                 className="bg-white/20 hover:bg-white/40 text-white p-2 rounded-full backdrop-blur-md transition"
               >
-                ❤
+                <Heart
+                  className={`w-6 h-6 transition ${
+                    favorite ? 'fill-red-600 text-red-600' : 'text-white'
+                  }`}
+                />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggle(props);
+                }}
+                className="bg-white/20 hover:bg-white/40 text-white p-2 rounded-full backdrop-blur-md transition"
+              >
+                <Star
+                  className={`w-6 h-6 transition ${
+                    inWatchlist ? 'fill-yellow-400 text-yellow-400' : 'text-white'
+                  }`}
+                />
               </button>
             </div>
           </div>

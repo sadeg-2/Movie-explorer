@@ -8,6 +8,8 @@ import DiscoverMovies from './pages/DiscoverMovies';
 import DiscoverSeries from './pages/DiscoverSeries';
 import SeriesDetails from './pages/SeriesDetails';
 import NotFound from './pages/NotFound';
+import FavoritesPage from './pages/Favorites';
+import WatchlistPage from './pages/WatchlistPage';
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/tv/:id" element={<SeriesDetails />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/watchlist" element={<WatchlistPage />} />
 
           <Route path="/actor/:id" element={<ActorDetails />} />
           <Route path="/discover/movies" element={<DiscoverMovies />} />
