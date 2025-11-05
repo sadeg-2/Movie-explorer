@@ -7,6 +7,7 @@ import ActorDetails from './components/ActorDetails';
 import DiscoverMovies from './pages/DiscoverMovies';
 import DiscoverSeries from './pages/DiscoverSeries';
 import SeriesDetails from './pages/SeriesDetails';
+import NotFound from './pages/NotFound';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/tv/:id" element={<SeriesDetails />} />
 

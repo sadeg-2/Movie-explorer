@@ -1,5 +1,5 @@
 import type { CardProps } from '../types/CardTypes';
-import type { TMDBMedia, TMDBVideo } from '../types/TMDBTypes';
+import type { TMDBMedia, TMDBSearchResult, TMDBVideo } from '../types/TMDBTypes';
 
 // const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_KEY = 'e247f482a1353f52e20c467698443143';
@@ -205,7 +205,7 @@ export async function searchMulti(query: string, page: number = 1) {
   // Filter out irrelevant results like "person with no profile"
   return {
     results: data.results?.filter(
-      (item: any) =>
+      (item: TMDBSearchResult) =>
         item.media_type === 'movie' ||
         item.media_type === 'tv' ||
         (item.media_type === 'person' && item.profile_path)

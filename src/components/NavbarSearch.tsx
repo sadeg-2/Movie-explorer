@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { searchMulti } from '../services/tmdbService';
 import { useNavigate } from 'react-router-dom';
+import type { TMDBSearchResult } from '../types/TMDBTypes';
 
 export default function NavbarSearch() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<TMDBSearchResult[]>([]);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const debounceRef = useRef<number | null>(null);
@@ -33,7 +34,7 @@ export default function NavbarSearch() {
     };
   }, [query]);
 
-  const handleSelect = (item: any) => {
+  const handleSelect = (item: TMDBSearchResult) => {
     setQuery('');
     setOpen(false);
 
