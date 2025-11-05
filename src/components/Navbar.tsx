@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   const [openMenu, setOpenMenu] = useState(false);
@@ -17,7 +18,9 @@ export default function Navbar() {
 
       {/* LINKS */}
       <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-        <a className="cursor-pointer hover:text-red-500 transition">Home</a>
+        <Link to={'/'} className="cursor-pointer hover:text-red-500 transition">
+          Home
+        </Link>
         <a className="cursor-pointer hover:text-red-500 transition">Movies</a>
         <a className="cursor-pointer hover:text-red-500 transition">Series</a>
         <a className="cursor-pointer hover:text-red-500 transition">Favorites</a>

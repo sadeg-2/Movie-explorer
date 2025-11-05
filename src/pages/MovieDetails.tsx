@@ -8,7 +8,6 @@ import {
 } from '../services/tmdbService';
 import MovieRow from '../components/MovieRow';
 import type { CardProps } from '../types/CardTypes';
-import { useTrailerStore } from '../store/useTrailerStore';
 import Hero from '../components/Hero';
 import CastRow from '../components/CastRow';
 import type { TMDBMovieDetails } from '../types/TMDBTypes';
@@ -17,7 +16,6 @@ type CastItem = { id: number; name: string; character: string; profile_path: str
 
 export default function MovieDetails() {
   const { id } = useParams<{ id: string }>();
-  const { open } = useTrailerStore(); // open trailer by movie id (optional)
   const movieId = Number(id);
 
   const [loading, setLoading] = useState(true);
@@ -65,11 +63,11 @@ export default function MovieDetails() {
     <div className="min-h-screen text-white">
       {/* Hero header */}
       <Hero
+        id={movieId}
         image={`https://image.tmdb.org/t/p/original${details.backdrop_path}`}
         title={details.title}
         tagline={`${details.release_date?.slice(0, 4)} • ⭐ ${details.vote_average.toFixed(1)}`}
         description={details.overview}
-        onPlay={() => open(movieId)}
         onMore={() => {
           document.getElementById('cast-section')?.scrollIntoView({ behavior: 'smooth' });
         }}

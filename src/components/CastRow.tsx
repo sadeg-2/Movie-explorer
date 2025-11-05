@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import type { TMDBCast } from '../types/TMDBTypes';
 
 type CastRowProps = {
@@ -7,13 +8,19 @@ type CastRowProps = {
 };
 
 export default function CastRow({ id, cast, title = 'Top Billed Cast' }: CastRowProps) {
+  const navigate = useNavigate();
+
   return (
     <section className="mt-8 px-6" id={id}>
       <h2 className="text-2xl font-bold text-white mb-4">{title}</h2>
 
       <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4">
         {cast.map((actor) => (
-          <div key={actor.id} className="shrink-0 w-32 text-center">
+          <div
+            key={actor.id}
+            onClick={() => navigate(`/actor/${actor.id}`)}
+            className="shrink-0 w-32 text-center"
+          >
             <div className="w-32 h-32 rounded-xl overflow-hidden bg-neutral-800">
               <img
                 src={

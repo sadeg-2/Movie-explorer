@@ -4,9 +4,10 @@ import MovieRow from '../components/MovieRow';
 import type { CardProps } from '../types/CardTypes';
 import { MovieAPI } from '../services/tmdbService';
 import type { TMDBMovie } from '../types/TMDBTypes';
-import { useTrailerStore } from '../store/useTrailerStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+  const navigate = useNavigate();
   const [popular, setPopular] = useState<CardProps[]>([]);
   const [topRated, setTopRated] = useState<CardProps[]>([]);
   const [newReleases, setNewReleases] = useState<CardProps[]>([]);
@@ -17,7 +18,6 @@ export default function Home() {
   const [horrorMovies, sethorrorMovies] = useState<CardProps[]>([]);
   const [animationMovies, setAnimationMovies] = useState<CardProps[]>([]);
   const [heroMovie, setHero] = useState<CardProps>();
-  const { open } = useTrailerStore();
 
   useEffect(() => {
     async function fetchData() {
@@ -72,12 +72,12 @@ export default function Home() {
     <>
       {heroMovie && (
         <Hero
+          id={heroMovie.id}
           image={heroMovie.image}
           title={heroMovie.title}
           tagline={`⭐ ${heroMovie.rating} • ${heroMovie.subtitle}`}
           description={heroMovie.description}
-          onPlay={() => open(heroMovie.id)} // ✅ open trailer directly
-          onMore={() => console.log('More info soon')}
+          onMore={() => navigate(`/movie/${heroMovie.id}`)}
         />
       )}
 

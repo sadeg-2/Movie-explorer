@@ -39,6 +39,9 @@ export default function Card(props: CardProps) {
             <img
               loading="lazy"
               src={image}
+              onError={(e) => {
+                e.currentTarget.src = '/movie.avif';
+              }}
               alt={title}
               className="w-full h-full object-cover hover:scale-110 transition duration-500"
             />
