@@ -1,73 +1,145 @@
-# React + TypeScript + Vite
+# 🎬 Movie Explorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application for discovering movies built with React and Vite, featuring a clean UI, real-time search, and interactive details. Perfect for movie enthusiasts looking to browse and explore trending, popular, or top-rated films.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🛠️ Tech Stack
 
-## React Compiler
+- **React** (UI Framework)
+- **Vite** (Fast development/build tool)
+- **TypeScript** (Static typing)
+- **Tailwind CSS** (Styling)
+- **Axios** or **Fetch API** (Data fetching)
+- **React Router** (Routing)
+- **Movie Database API** (e.g., TMDB, OMDb)
+- [Optional] **Jest** / **React Testing Library** (Testing)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🔎 **Instant Search**: Find movies as you type.
+- 🗂️ **Browse Categories**: Trending, Popular, Top Rated, Upcoming, etc.
+- 📄 **Detailed Movie Info**: View title, year, rating, synopsis, poster, genres, and more.
+- 💾 **Save Favorites**: Local storage support for favorites/watchlist.
+- 🎨 **Responsive & Accessible UI**: Mobile-friendly and keyboard accessible.
+- 🌙 **Light/Dark Mode**: Switch between UI themes.
+- 🔄 **Pagination & Infinite Scroll**: Seamlessly browse through movie lists.
+- 📊 **Rating Visualization**: See movie scores at a glance.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## ⚡ Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# 1. Clone the repository
+git clone https://github.com/sadeg-2/Movie-explorer.git
+cd Movie-explorer
+
+# 2. Install dependencies
+npm install                # or 'yarn install' or 'pnpm install'
+
+# 3. Start development server
+npm run dev                # or 'yarn dev' or 'pnpm dev'
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Scripts
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Script        | Description                             |
+|---------------|-----------------------------------------|
+| `dev`         | Launches local development server        |
+| `build`       | Builds production-ready files            |
+| `preview`     | Preview build output locally             |
+| `test`        | Run test suite (if configured)           |
+| `lint`        | Run linter for code quality (if added)   |
+
+Example:
+```bash
+npm run dev      # Start development server
+npm run build    # Create production build
+npm run preview  # Preview production build
 ```
+
+---
+
+## 📁 Folder Structure
+
+```
+├── public/           # Static assets (index.html, icons, etc.)
+├── src/
+│   ├── assets/       # Images, logos, etc.
+│   ├── components/   # Reusable React components
+│   ├── pages/        # Route pages (Home, Details, etc.)
+│   ├── hooks/        # Custom React hooks
+│   ├── utils/        # Utility functions
+│   ├── api/          # API logic (e.g., data fetching)
+│   ├── App.tsx       # Root component
+│   └── main.tsx      # App entry point
+├── .env.example      # Environment variable template
+├── package.json      # Project metadata & scripts
+└── README.md
+```
+
+---
+
+## 🗝️ Environment Variables
+
+Create a `.env` file in the root directory for API keys and sensitive config. Copy `.env.example` as a starting point.
+
+Example `.env`:
+```env
+VITE_API_KEY=your_api_key_here
+VITE_API_URL=https://api.example.com
+```
+
+Access these in your code via `import.meta.env`.
+
+---
+
+## 🌍 Deployment
+
+### Vercel
+
+1. Push your repository to GitHub.
+2. Import into [Vercel](https://vercel.com/) and set environment variables.
+3. Vercel will auto-detect Vite/React and deploy.
+
+### Netlify
+
+1. Connect your repo at [Netlify](https://netlify.com/).
+2. Add environment variables in settings.
+3. Use build command: `npm run build` and publish directory: `dist`.
+
+After deployment, your app will be live at your assigned domain.
+
+---
+
+## 🤝 Contributing
+
+1. Fork this repo and create your branch: `git checkout -b my-feature`
+2. Make your changes & commit: `git commit -m 'add feature'`
+3. Push to your fork: `git push origin my-feature`
+4. Create a Pull Request
+
+Please follow the [Contributor Covenant](https://www.contributor-covenant.org/) for respectful and productive collaboration.
+
+---
+
+## 📜 License
+
+Licensed under the [MIT License](LICENSE).
+
+---
+
+## 📸 Screenshots / Demo
+
+![App Screenshot](public/screenshot.png)
+
+👉 [Live Demo](https://your-app-demo-link.vercel.app/)
+
+---
+
+*Feel free to customize this README for your own Movie Explorer project!*
